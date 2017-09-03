@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 
 	<head>
 		<meta charset="utf-8">
 
-		<title>SOLID Principles - TSI Payment Brown Bag Lunch</title>
+		<title>La génération des dates en PHP: Slides</title>
 
-		<meta name="description" content="SOLID Principles - TSI Payment Brown Bag Lunch">
-		<meta name="author" content="Thomas Dutrion">
+		<meta name="description" content="La génération des dates en PHP: Slides">
+		<meta name="author" content="Kevin Nadin">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,8 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/theme/sky-new.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -53,47 +52,35 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h1>SOLID Principles</h1>
-					<h3>TSI Payment Brown Bag Lunch #1</h3>
+					<h1>La génération des dates en PHP</h1>
+					
 					<p>
-						<small>Par <a href="https://onename.com/tdutrion">Thomas Dutrion</a> / <a href="https://twitter.com/tdutrion">@tdutrion</a> - 04/10/2016</small>
+						Par Kevin Nadin (slide padawan) / <a href="https://twitter.com/kevinjhappy">@kevinjhappy</a> - Forum PHP 2017
 					</p>
 				</section>
 
 				<section>
 					<section>
-						<h1>SOLID Principles</h1>
-						<table class="topics">
-							<tbody>
-								<tr>
-									<th>Initiale</th>
-									<th>Nom</th>
-								</tr>
-								<tr>
-									<th>S</th>
-									<td>Responsabilité unique (Single Responsibility Principle)</td>
-								</tr>
-								<tr>
-									<th>O</th>
-									<td>Ouvert/fermé (Open/closed principle)</td>
-								</tr>
-								<tr>
-									<th>L</th>
-									<td>Substitution de Liskov (Liskov substitution Principle)</td>
-								</tr>
-								<tr>
-									<th>I</th>
-									<td>Ségrégation des interfaces (Interface segregation principle)</td>
-								</tr>
-								<tr>
-									<th>D</th>
-									<td>Inversion des dépendances (Dependency Inversion Principle)</td>
-								</tr>
-							</tbody>
-						</table>
+						<h2>Vraiment ??</h2>
+						
+						<h2>Une présentation sur les dates ??</h2>
+						<p>
+							<ul>
+								<li>Oui, les dates sont piégeuses!</li>
+								<li>Il y a beaucoup de possibilités de les générer, et elles peuvent vous causer des soucis...</li>
+							</ul>
+						</p>
 					</section>
 					<section>
-						<h1>Qu'est ce que c'est ?</h1>
+						<h2>Nous allons voir de suite :</h2>
+						<ol>
+							<li>Date function (obviously)</li>
+							<li>Timestamp functions: mktime, strtotime</li>
+							<li>DateTime Object</li>
+							<li>DateTimeImmutable Object</li>
+							<li>DateTimeZone Object</li>
+							<li>DateInterval Object</li>
+						</ol>
 					</section>
 					<section>
 						<p>Un ensemble de "règles" génériques de bonne conduite pour un développement plus fiable et robuste.</p>
