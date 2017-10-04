@@ -52,7 +52,7 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h1>La génération des dates en PHP</h1>
+					<h1>La génération de dates en PHP</h1>
 					
 					<p>
 						Par Kevin Nadin, conférencier Padawan / <a href="https://twitter.com/kevinjhappy">@kevinjhappy</a> - Forum PHP 2017
@@ -81,81 +81,106 @@
 							<li>L'objet DateInterval</li>
 						</ol>
 					</section>
+				</section>
+				<section>
 					<section>
-						<p>Un ensemble de "règles" génériques de bonne conduite pour un développement plus fiable et robuste.</p>
+						<h1>La fonction date()</h1>
 					</section>
 					<section>
-						<h3>Avantages présumés :</h3>
+						<h2>Commencons avec les bases :</h2>
 						<ul>
-							<li>Augmentation directe de la testabilité du code</li>
-							<li>Augmentation partielle de la réutilisabilité des communs</li>
-							<li>Renforcer la cohésion et la lisibilité du code</li>
-							<li>Faciliter le travail en équipe</li>
+							<li>La première fonction à laquelle on pense, évidemment</li>
+							<li>Elle l'a été pour moi pour en générer</li>
+							<li>php.net: fonction date</li>
 						</ul>
+					</section>
+					<section>
+						<pre><code class="php">$testDate = date('Y-m-d');
+
+echo $testDate; 
+
+// 2017-05-26
+
+
+$testDate = date('Y-m-d H:i:s');
+
+echo $testDate; 
+
+// 2017-05-26 16:25:08
+
+</code></pre>
+					</section>
+					<section>
+						<h2>Les dates avec un timestamp</h2>
+						<p>date() accepte un timestamp comme second paramètre</p>
+						<pre><code class="php">string date ( string $format [, int $timestamp = time() ] )</code></pre>
+					</section>
+					<section>
+						<h2>Timestamps ??</h2>
+						<p>Un timestamp est le nombre de secondes écoulée depuis le 1er Janvier 1970</p>
+						<p>Aucune décalage horaire n'est appliqué à ce calcul</p>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h1>Single Responsibility Principle</h1>
-						<h2>Responsabilité unique</h2>
+						<h1>
+							fonction mktime()
+						</h1>
 					</section>
 					<section>
-						<p>Une classe n'a qu'une seule responsabilité, elle ne sait faire qu'une chose mais le fait bien.</p>
-						<p>Le code de la classe est plus court et donc plus lisible.</p>
-						<p>Les fonctionnalités sont <code>encapsulées</code></p>
-						<p>On réduit le <code>couplage</code> entre les classes</p>
+						<p>Prends en entrée 6 paramètres :</p>
+						<p>ATTENTION A LEUR ORDRES !</p>
+						<ul>
+							<li>1- heures</li>
+							<li>2- minutes</li>
+							<li>3- secondes</li>
+							<li>4- mois</li>
+							<li>5- jours</li>
+							<li>6- années</li>
+						</ul> 
 					</section>
 					<section>
-						<pre><code class="php">class Application_Model_Error
-{
-    private $_message;
+						<pre><code class="php">$hour = 0 ;
+$minute = 0 ;
+$second = 0 ;
+$month = 10 ;
+$day = 24 ;
+$year = 2016 ;
 
-    public function setError($message)
-    {
-        $this->_message = $message;
-        $logger = new Tsi_Logger();
-        $logger->critical($message);
-        throw new Exception($message);
-    }
-}</code></pre>
+$timestamp = mktime($hour, $minute, $second, $month, $day, $year);
+
+$myDate = date('Y-m-d', $timestamp);
+
+echo $myDate; // 2016-10-24</code></pre>
 					</section>
 					<section>
-						<h1>STOP !</h1>
+						<h2>mktime semble un peu moisie...</h2>
+						<p>Ouais c'est vrai, cela peut être très compliqué.</p>
+						<p>Mais cela peut apporter une précision chirurgicale</p>
 					</section>
 					<section>
-						<pre><code class="php">declare (strict_types = 1);
+						<pre width="800"><code class="php">// I want to get the last day of last month, we are the 26th May 2017
 
-namespace Application\Exception;
+$month = date('m')-1 ;
+$year = date('Y') ;
 
-use Exception;
-use Tsi\Logger;
+// get the timestamp of last month
+$timestampLastMonth = mktime(0, 0, 0, $month, 1, $year) ;
 
-class SpecificBusinessException extends Exception
-{
-    public function __construct(string $message)
-    {
-        parent::__construct($message, 422);
-        // HTTP code 422: Unprocessable Entity
-    }
-}</code></pre>
+// get the last day of the month, so the 30th April
+$lastDayOfTheMonth = date('t', $timestampLastMonth);
+
+$timestampLastDayOfLastMonth = mktime(0, 0, 0, $month, $lastDayOfTheMonth, $year);
+
+// I have the correct timestamp, I can call the function date
+$lastDayOfLastMonth = date('Y-m-d', $timestampLastDayOfLastMonth);
+
+echo $lastDayOfLastMonth; // 2017-04-30
+</code></pre>
 					</section>
-					<section>
-						<pre><code class="php">namespace Tsi\Logger;
-class Logger
-{
-  private $writer;
-  private $formatter;
-  public function __construct(Writer $writer, Formatter $formatter){
-    $this->writter = $writter;
-    $this->formatter = $formatter;
-  }
-  public function critical(\Exception $exception){
-    $this->writter->write(
-      $this->formatter->format($exception)
-    );
-  }
-}</code></pre>
+					<section><img src="images/I-smile-because-i-have-no-idea-whats-going-on.jpg" alt="I smile because I have no idea whats going on">
 					</section>
+				</section>
 					<section>
 					<pre><code class="php">use Application\Exception\SpecificBusinessException;
 use Tsi\Logger\{Formatter,Writer,Logger};
