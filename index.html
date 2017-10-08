@@ -180,31 +180,90 @@ echo $lastDayOfLastMonth; // 2017-04-30
 					</section>
 					<section><img src="images/I-smile-because-i-have-no-idea-whats-going-on.jpg" alt="I smile because I have no idea whats going on">
 					</section>
+					<section>
+					<pre><code class="php">//  I want to get the last day of last month, we are the 26th May 2017
+// made in one line 
+
+$lastDayOfLastMonth = date(
+    'Y-m-d', 
+    mktime( 
+        0, 
+        0, 
+        0, 
+        date('m')-1, 
+        date('t', mktime(0, 0, 0, date('m')-1, 1, date('Y'))), 
+        date('Y')
+    )
+);
+
+
+echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
+					</section>
+					<section><img src="images/Not-sure-if-its-php-or-matrix-source-code.jpg" alt="Not sure if its php or matrix source code">
+					</section>
+					<section>
+						<h2>Comportement à connaitre</h2>
+						<p>Si j'essaye de mettre le 33 Janvier</p>
+						<pre><code class="php">echo date('Y-m-d', mktime(0, 0, 0, 1, 33, 2017));
+
+// 2017-02-02</code></pre>
+<p>Cela va prendre la date du 31 Janvier + 2 jours</p>
+					</section>
 				</section>
+				<section>
 					<section>
-					<pre><code class="php">use Application\Exception\SpecificBusinessException;
-use Tsi\Logger\{Formatter,Writer,Logger};
-
-$logFormatter = new \Tsi\Logger\Formatter();
-$logWriter = new \Tsi\Logger\Writer();
-$logger = new \Tsi\Logger\Logger($logWriter, $logFormatter);
-
-if ($parameter !== 'desired value') {
-    $exception = new SpecificBusinessException();
-    $logger->critical($exception);
-    throw $exception;
-}
-</code></pre>
+						<h2>strtotime(string $time, timestamp)</h2>
 					</section>
 					<section>
-						<p>Chaque classe à maintenant une seule responsabilité :</p>
-						<ul>
-							<li>Contenir le détail de l'erreur (code http, message) [<code>value object</code>]</li>
-							<li>Formatter une erreur en chaine de caractère ou objet exploitable [<code>transformer</code>]</li>
-							<li>Ecrire dans un fichier ou envoyer dans un backend quelconque (redis, elasticsearch, UDP, TCP)</li>
-							<li>Logger un type de données</li>
-						</ul>
+						<p>Supposons, nous somme le 2017-05-26 :</p>
+						<pre class="fragment" ><code class="php">$firstDayOfLastMonth = date('Y-m-d', strtotime("first day of last month"));
+
+// => 2017-04-01</code></pre>
+						<pre class="fragment" ><code class="php">$lastDayOfLastMonth = date('Y-m-d', strtotime("last Day of Last Month"));
+
+// => 2017-04-30</code></pre>
+						<pre class="fragment" ><code class="php">$lastSunday = date('Y-m-d', strtotime("last Sunday"));
+
+// => 2017-05-21</code></pre>
+						<pre class="fragment" ><code class="php">$mondayOfLastWeek = date('Y-m-d', strtotime("last Monday of Last Week"));
+
+// => 2017-05-15</code></pre>
 					</section>
+					<section>
+						<h2>Alors strtotime est bien ?</h2>
+						<p>Ouais, c'est pas mal du tout</p>
+						<p>Mais il faut faire attention à la "magie" de la fonction</p>
+						<p>Certaines dates ne peuvent pas être faite avec</p>
+					</section>
+					<section>
+						<pre><code class="php">// WARNING !! first Specific day of last week will not give you what you want
+
+$date = date('Y-m-d', strtotime("First Monday of Last Week"));
+
+// => 2017-04-24</code></pre>
+<pre class="fragment"><code class="php">// WARNING !! if you are the 31th, Last month will give you 
+// the day one of this month
+
+$timeThirtyOneOctober = mktime(0,0,0,10,31,2017);
+
+$wrongDate = date('Y-m-d', strtotime("Last Month", $timeThirtyOneOctober));
+
+// => 2017-10-01</code></pre>
+<pre class="fragment"><code class="php">// Only way to get it right is by using this
+$goodDate = date('Y-m-d', strtotime(
+	"Last Day of Last Month", 
+	$timeThirtyOneOctober
+	));
+
+// => 2017-09-30</code></pre>
+
+					</section>
+					<section>
+						<img src="images/Jackie-Chan-WTF.jpg" alt="Jackie-Chan-WTF">
+					</section>
+
+					<!--fin strtotime-->
+				</section>
 					<section>
 						<p>Un autre exemple : validation de données</p>
 					</section>
