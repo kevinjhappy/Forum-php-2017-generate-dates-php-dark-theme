@@ -302,7 +302,7 @@ $dayFifteenOfThisMonth = date(
 					<section>
 						<img src="images/hum-no.png" atl="hum... No !">
 						<h2>Hum... NON !!</h2>
-						<p>Parce que les comportements sont les mêmes</p>
+						<p>Parce que les comportements sont les mêmes !</p>
 					</section>
 					<section>
 						<pre><code class="php">$firstDayOfThisMonth = new \DateTime('first day of this month');
@@ -329,7 +329,115 @@ $dayFifteenOfThisMonth->format('Y-m-d');
 						<h2>Et les pièges sont les mêmes !</h2>
 						<img src="images/its-a-trap.gif" alt="it's a trap !">
 					</section>
+                    <section>
+						<pre><code class="php" >// first Specific day of last Week
+// Today is 2017-05-26
+
+$date = new DateTime("First Monday of Last Week");
+
+$date->format('Y-m-d') ;
+
+// => 2017-04-24</code></pre>
+<pre class="fragment"><code class="php" >// phrases that seems ok but does not work at all
+
+$wrongDate = new DateTime("Monday of Last Week");
+
+$wrongDate->format('Y-m-d');
+
+// Fatal error: Uncaught Exception: DateTime::__construct():
+// Failed to parse time string (Monday of Last Week) </code></pre>
+					</section>
+					<section>
+						<h2><code>DateTimeImmutable</code> c'est quoi ??</h2>
+						<p>C'est la même utilisation que <code>DateTime()</code></p>
+						<p>La seule différence est que cet objet ne peut pas être modifié une fois créé.</p>
+					</section>
+					<section>
+						<h2>Une fonction en plus : </h2>
+							<p><code>DateTimeImmutable::createFromMutable</code></p>
+						<pre class="fragment"><code class="php">// create a specific date
+$date = new \DateTime();
+$date->setTime(0, 0, 0);
+$date->setDate(2017, 09, 15);
+
+$myNewDate = \DateTimeImmutable::createFromMutable($date);
+
+echo $myNewDate->format('Y-m-d');
+// 2017-09-15</code></pre>
+
+					</section>
 				<!--End DateTime Object-->
+				</section>
+				<section>
+					<section>
+						<h1>L'objet <code>DateTimeZone</code></h1>
+					</section>
+					<section>
+						<h2>Toujours penser et faire attention avec le fuseau horaire</h2>
+						<ul>
+							<li>Par défaut configurez le serveur à UTC</li>
+							<li>Pensez à sauvegarder celui des dates reçues</li>
+							<li>N'oubliez pas de l'appliquer lorsque vous communiquez</li>
+						</ul>
+					</section>
+					<section>
+						<pre><code class="php">// set a date with a Timezone
+
+$date = new DateTime('2017-05-01', new DateTimeZone('Europe/Paris'));
+
+echo "Europe/Paris " . $date->format('Y-m-d H:i:sP') . "\n";
+
+
+$date->setTimezone(new DateTimeZone('Australia/Sydney'));
+
+echo "Australia/Sydney " . $date->format(\DateTime::ISO8601) . "\n";
+
+// Europe/Paris 2017-05-01 00:00:00+02:00
+// Australia/Sydney 2017-05-01T08:00:00+1000</code></pre>
+					</section>
+					<section>
+						<h2>Fuseaux Horaires possibles</h2>
+						<ul>
+							<li>php.net => timezones : Attention à celles qui sont listés dans la catégorie "Autres" comme Japan, Turkey, etc...</li>
+							<li>Wikipedia.org => list timezones</li>
+						</ul>
+					</section>
+					<section>
+						<pre><code class="php">// set a date with a Timezone in number of hours
+
+$date = new DateTime('2017-05-01', new DateTimeZone('+02:00'));
+
+echo "UTC + 2 hours " . $date->format('Y-m-d H:i:sP') . "\n";
+
+// UTC + 2 hours 2017-05-01 00:00:00+02:00
+
+
+$utcDate = new DateTime('2017-05-01', new DateTimeZone('UTC'));
+
+echo "UTC date " . $utcDate->format('Y-m-d H:i:sP') . "\n";
+
+// UTC date 2017-05-01 00:00:00+00:00</code></pre>
+					</section>
+					<section>
+						<h2>Et bien sûr... des pièges !</h2>
+						<pre><code class="php">// today in Paris, let's try to get the location of the timezone
+$dateInParis = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+
+print_r($dateInParis->getTimezone()->getLocation());
+/*Array (
+    [country_code] => FR
+    [latitude] => 48.86666
+    [longitude] => 2.33333
+    [comments] =>
+)*/</code></pre>
+<pre class="fragment"><code class="php">// now if we received this date in string format
+
+$newDateInParis = new \DateTime($dateInParis->format('Y-m-d H:i:sP'));
+
+var_dump($newDateInParis->getTimezone()->getLocation());
+
+// bool(false)</code></pre>
+					</section>
 				</section>
 
 			</div>
