@@ -180,8 +180,7 @@ echo $lastDayOfLastMonth; // 2017-04-30
 					</section>
 					<section><img src="images/I-smile-because-i-have-no-idea-whats-going-on.jpg" alt="I smile because I have no idea whats going on">
 					</section>
-					<section>
-					<pre><code class="php">//  I want to get the last day of last month, we are the 26th May 2017
+					<section><pre class="stretch"><code class="php">//  I want to get the last day of last month, we are the 26th May 2017
 // made in one line 
 
 $lastDayOfLastMonth = date(
@@ -191,14 +190,18 @@ $lastDayOfLastMonth = date(
         0, 
         0, 
         date('m')-1, 
-        date('t', mktime(0, 0, 0, date('m')-1, 1, date('Y'))), 
+        date('t', mktime(
+			0,
+			0,
+			0,
+			date('m')-1,
+			1,
+			date('Y')
+			)),
         date('Y')
     )
 );
-
-
-echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
-					</section>
+// => 2017-04-30</code></pre></section>
 					<section><img src="images/Not-sure-if-its-php-or-matrix-source-code.jpg" alt="Not sure if its php or matrix source code">
 					</section>
 					<section>
@@ -209,10 +212,12 @@ echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
 // 2017-02-02</code></pre>
 <p>Cela va prendre la date du 31 Janvier + 2 jours</p>
 					</section>
+					<section><img src="images/why-it-doesnt-send-me-a-fatal-error.jpg" alt="why-it-doesnt-send-me-a-fatal-error">
+					</section>
 				</section>
 				<section>
 					<section>
-						<h2>strtotime(string $time, timestamp)</h2>
+						<h2><code>strtotime</code>(<code>string $time</code>, <code>int $timestamp</code>)</h2>
 					</section>
 					<section>
 						<p>Supposons, nous somme le 2017-05-26 :</p>
@@ -236,7 +241,8 @@ echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
 						<p>Certaines dates ne peuvent pas être faite avec</p>
 					</section>
 					<section>
-						<pre><code class="php">// WARNING !! first Specific day of last week will not give you what you want
+						<pre><code class="php">// WARNING !! first Specific day of last week
+// will not give you what you want
 
 $date = date('Y-m-d', strtotime("First Monday of Last Week"));
 
@@ -261,318 +267,71 @@ $goodDate = date('Y-m-d', strtotime(
 					<section>
 						<img src="images/Jackie-Chan-WTF.jpg" alt="Jackie-Chan-WTF">
 					</section>
+					<section>
+<pre><code class="php">// WARNING, some phrases seems Ok but does not work at all
 
+$wrongDate = date('Y-m-d', strtotime("Monday of Last Week"));
+
+// => 1970-01-01</code></pre>
+<pre class="fragment"><code class="php">// You can't construct with strtotime the 13th of this month
+
+$dayFifteenOfThisMonth = date(
+	'Y-m-d',
+	mktime(0, 0, 0, date('m'), 13, date('Y'))
+);
+
+// => 2017-05-15</code></pre>
+					</section>
+					<section>
+						<img src="images/traps-traps-everywhere.jpg" alt="traps-traps-everywhere">
+					</section>
 					<!--fin strtotime-->
 				</section>
-					<section>
-						<p>Un autre exemple : validation de données</p>
-					</section>
-					<section>
-						<pre><code class="php">class Service
-{
-    public function validateData(array $dataSet) {
-        if (!isset($dataSet['val1']) || !is_string($dataSet['val1'])) { ... }
-        if (!isset($dataSet['val2']) || !is_int($dataSet['val2'])) { ... }
-        if (!isset($dataSet['val3']) || !is_a($dataSet['val3'])) { ... }
-    }
-}</code></pre>
-						<pre><code class="php">$dataSet = [
-    'val1' => 'string',
-    'val2' => 1,
-    'val3' => (object) ['val' => 'ok'],
-];
-
-$service = new Service();
-$service->validateData($dataSet);</code></pre>
-					</section>
-					<section>
-						<p>Question mathématique : combien de chemin existe-t-il dans cette fonction ?</p>
-						<p class="fragment">Réponse : un truc avec des puissances de 2, mais je ne suis pas bon en maths...</p>
-					</section>
-					<section>
-						<p>Refactorons :</p>
-					</section>
-					<section>
-						<pre><code class="php">class Service {
-    private $validatorMap = [
-         'val1' => new StringValidator(),
-         'val2' => new IntValidator(),
-         'val3' => new CustomObjectValidator(),
-    ];
-    public function validateData(array $dataSet) {
-        foreach ($this->validatorMap as $target => $validator) {
-            if (!isset($dataSet[$target])) {
-                throw new Exception(...);
-            }
-            $validator->validate($dataSet[$target]);
-        }
-        return true;
-    }
-}</code></pre>
-					</section>
-					<section>
-						<p>Ce code devrait être largement amélioré, mais il suffit pour cette démonstration.</p>
-					</section>
-					<section>
-						<p>Autre exemple : vie réelle.</p>
-					</section>
-					<section>
-						<img src="images/perforateur-burineur-perceuse.jpg" alt="Photo de perforateur-burineur-perceuse">
-						<p>Perforateur/Burineur/Perceuse</p>
-					</section>
-				</section>
 				<section>
 					<section>
-						<h1>Open/closed principle</h1>
-						<h2>Ouvert/fermé</h2>
+						<h1>L'objet <code>DateTime</code></h1>
 					</section>
 					<section>
-						<p>Une classe finalisée (testé et passée en revue de code) ne peut plus être modifié pour servir un autre cas, autrement dit fermée.</p>
-						<p>Une classe fermée doit proposer des moyens d'extension (d'ajout de fonctionnalité par ajout ou modification de composants interagissant avec elle). Cela comprends la composition et l'héritage (polymorphisme).</p>
+						<h2>Enfin on discute !!</h2>
+						<h2>Je peux oublier les chapitres précédents !</h2>
 					</section>
 					<section>
-						<h3>Oh ! On l'a déjà fait !</h3>
+						<h2>Yeah !!</h2>
+						<img src="images/yeah-gif.gif" alt="yeah gif">
 					</section>
 					<section>
-						<img src="images/simple-logger.png" alt="Class diagram: simple logger with one writer type">
+						<img src="images/hum-no.png" atl="hum... No !">
+						<h2>Hum... NON !!</h2>
+						<p>Parce que les comportements sont les mêmes</p>
 					</section>
 					<section>
-						<img src="images/logger.png" alt="Class diagram: logger with multiple writer type">
+						<pre><code class="php">$firstDayOfThisMonth = new \DateTime('first day of this month');
+
+$firstDayOfThisMonth->format('Y-m-d');
+
+// => 2017-05-01</code></pre>
+						<pre class="fragment"><code class="php">$dayFifteenOfThisMonth = new \DateTime();
+
+$dayFifteenOfThisMonth->setTime(0, 0, 0);
+
+$dayFifteenOfThisMonth->setDate(
+    (int) $dayFifteenOfThisMonth->format('Y'),
+    (int) $dayFifteenOfThisMonth->format('m'),
+    15
+);
+
+$dayFifteenOfThisMonth->format('Y-m-d');
+
+// => 2017-05-15</code></pre>
+						<!--<pre class="fragment"><code class="php"></code></pre>-->
 					</section>
 					<section>
-						<img src="images/aggregateLogger.png" alt="Class diagram: logger with an aggregate of writers">
+						<h2>Et les pièges sont les mêmes !</h2>
+						<img src="images/its-a-trap.gif" alt="it's a trap !">
 					</section>
-					<section>
-						<p>Le système peut donc être étendu de plusieurs façons, sans pour autant modifier la classe existante.</p>
-					</section>
+				<!--End DateTime Object-->
 				</section>
-				<section>
-					<section>
-						<h1>Liskov substitution Principle</h1>
-						<h2>Substitution de Liskov</h2>
-					</section>
-					<section>
-						<h1>??????</h1>
-					</section>
-					<section>
-						<p>Une instance de type T doit pouvoir être remplacée par une instance de type G, tel que G sous-type de T, sans que cela ne modifie la cohérence du programme.</p>
-					</section>
-					<section>
-						<h1>????????????????????????</h1>
-					</section>
-					<section>
-						<p>Une classe peut être remplacée par une autre classe partageant le même type primitif, sans modifier le comportement du programme.</p>
-					</section>
-					<section>
-						<section>
-							<pre><code class="php">class Tiger {
-    public function roar() {
-        echo 'ROOAARRRRR!!!!';
-    }
-}</code></pre>
-							<pre><code class="php">class Cat extends Tiger {
-    public function roar() {
-        throw new Exception('Cat purr, they do not roar...');
-    }
-}</code></pre>
-						</section>
-					</section>
-					<section>
-						<p>En partant d'un mauvais héritage, la substitution entraine un nouveau comportement du code donné.</p>
-						<p>Remplacer les héritages par des classes abstraites ou des interfaces spécifiques permet d'éviter ces comportements.</p>
-					</section>
-					<section>
-						<pre><code class="php">interface AnimalInterface {
-    public function makeASound();
-}
 
-class Tiger implements AnimalInterface {
-    public function roar() {
-        return 'ROOAARRRRR!!!!';
-    }
-    public function makeASound() { echo $this->roar(); }
-}
-
-class Cat implements AnimalInterface {
-    public function purr() {
-        return 'puuurrrrr! :)';
-    }
-    public function makeASound() { echo $this->purr(); }
-}</code></pre>
-					</section>
-					<section>
-						<p>La substitution est maintenant réussie, les deux objets ont des comportements différents adaptés à leurs caractéristiques, et le code qui les utilises à le même comportement quel que soit l'objet utilisé.</p>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h1>Interface segregation principle</h1>
-						<h2>Ségrégation des interfaces</h2>
-					</section>
-					<section>
-						<p>Séparer les implémentations et le besoin de la classe utilisatrice pour ne garder que l'essence de la classe utilisée.</p>
-						<p>En d'autres termes, utiliser des types très spécifiques pour n'avoir que la méthode nécessaire.</p>
-					</section>
-					<section>
-						<pre><code class="php">class Logger() {
-    public function emergency($message, array $context = array()) { ... }
-    public function alert($message, array $context = array()) { ... }
-    public function critical($message, array $context = array()) { ... }
-    public function error($message, array $context = array()) { ... }
-    public function warning($message, array $context = array()) { ... }
-    public function notice($message, array $context = array()) { ... }
-    public function info($message, array $context = array()) { ... }
-    public function debug($message, array $context = array()) { ... }
-    public function log($level, $message, array $context = array()) { ... }
-}</code></pre>
-					</section>
-					<section>
-						<pre><code class="php">class LoggerUser() {
-    public function methodWithLogger(Logger $logger) {
-        $this->critical('boom!');
-    }
-}</code></pre>
-					</section>
-					<section>
-						<p>Imaginons un test unitaire pour cette méthode : quel est le paramètre d'entrée ?</p>
-					</section>
-					<section>
-						<pre><code class="php">/**
- * @test
- */
-public function methodWithLogger_using_mock_logger() {
-    $loggerMock = $this->getMockBuilder(Logger::class)
-        ->methods(array('emergency', 'alert', 'critical', '...'))
-        ->getMock();
-		$loggerMock->method('emergency')
-        ->with(...)
-        ->willReturn('foo');
-    ...
-    $target = (new LoggerUser())->methodWithLogger($loggerMock);
-}</code></pre>
-					</section>
-					<section>
-						<p>Extrayons une meilleur interface, que fait la méthode avec cet objet ?</p>
-					</section>
-					<section>
-						<pre><code class="php">interface CriticalLoggerInterface {
-    public function critical($message, array $context = array()) { ... }
-}
-
-class LoggerUser() {
-    public function methodWithLogger(CriticalLoggerInterface $logger) {
-        $this->critical('boom!');
-    }
-}</code></pre>
-						<pre><code class="php">/**
- * @test
- */
-public function methodWithLogger_using_mock_logger() {
-    $loggerMock = $this->getMockBuilder(Logger::class)
-        ->methods(array('critical')
-        ->getMock();
-		$loggerMock->method('critical')
-        ->with(...)
-        ->willReturn('foo');
-    $target = (new LoggerUser())->methodWithLogger($loggerMock);
-}</code></pre>
-					</section>
-					<section>
-						<p>Utiliser un typage très spécifique renforce la testabilité et les garanties de composer avec un objet correspondant au besoin.</p>
-						<p>Une <code>interface</code> peut étendre plusieurs autres interfaces.</p>
-						<p>Un autoload correct (<code>classmap</code>) et un <code>opcache</code> bien configuré reduisent l'impact du chargement de fichier supplémentaires.</p>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h1>Dependency Inversion Principle</h1>
-						<h2>Inversion des dépendances </h2>
-					</section>
-					<section>
-						<p>A. High-level modules should not depend on low-level modules. Both should depend on abstractions.</p>
-						<p>B. Abstractions should not depend on details. Details should depend on abstractions.</p>
-					</section>
-					<section>
-						<p>Les classes ne doivent pas dépendre d'implementations, mais d'abstractions (interfaces).</p>
-						<p>Les classes seront intégrées (bind) les unes avec les autres à l'aide d'un container d'injection de dépendance (Service Manager en ZF2, fonctionne suivant le ServiceLocator pattern).</p>
-						<p>Les classes n'héritent pas de concretions, elles implémentent des interfaces.</p>
-					</section>
-					<section>
-						<pre><code class="php">namespace Psr\Log;
-
-interface LoggerInterface
-{
-    public function emergency($message, array $context = array());
-    public function alert($message, array $context = array());
-    public function critical($message, array $context = array());
-    public function error($message, array $context = array());
-    public function warning($message, array $context = array());
-    public function notice($message, array $context = array());
-    public function info($message, array $context = array());
-    public function debug($message, array $context = array());
-    public function log($level, $message, array $context = array());
-}</code></pre>
-					</section>
-					<section>
-						<pre><code class="php">namespace Psr\Log;
-
-/**
- * Describes a logger-aware instance
- */
-interface LoggerAwareInterface
-{
-    /**
-     * Sets a logger instance on the object
-     *
-     * @param LoggerInterface $logger
-     * @return null
-     */
-    public function setLogger(LoggerInterface $logger);
-}</code></pre>
-					</section>
-					<section>
-						<pre><code class="php">namespace Application\Whatever;
-
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\Logger;
-
-class WithLogger implements LoggerAwareInterface
-{
-    public function useLogger(LoggerInterface $logger) {
-        // do something with the logger
-    }
-}</code></pre>
-					</section>
-					<section>
-						<p>Qui est mon logger ?</p>
-					</section>
-					<section>
-						<p>Un logger perso, si les besoins business le nécésitent.</p>
-						<p>Une librairie standard, testée et maintenue, dans tous les autres cas.</p>
-						<ul>
-							<li><a href="https://github.com/Seldaek/monolog">Monolog</a></li>
-							<li><a href="https://github.com/zendframework/zend-log/blob/master/doc/book/psr3.md">Zend Log</a></li>
-							<li><a href="https://packagist.org/search/?tags=psr-3">et plein d'autres</a></li>
-						</ul>
-					</section>
-					<section>
-						<p>On ne reste pas bloqué sur une implementation.</p>
-						<p>On peut utiliser Zend Log pour écrire dans des fichiers de logs, et Monolog pour envoyer vers Graylog en UDP.</p>
-						<p>La testabilité est renforcée, on peut utiliser un mock ou un null logger pour les tests.</p>
-					</section>
-				</section>
-				<section>
-					<h1>Merci pour votre écoute !</h1>
-				</section>
-				<section>
-					<h1>Agenda :</h1>
-					<ul>
-						<li><a href="https://hacktoberfest.digitalocean.com/">hacktoberfest</a> tout le mois d'Octobre, s'inscrire et faire des PR (#git, #github, #OSS)</li>
-						<li><a href="http://geekmentalhelp.com/">GeekMentalHelp week</a> cette semaine (#geekmentalhelp, #mentalhealth, #community)</li>
-						<li><a href="http://event.afup.org/">PHP 7 (avancé) @ OpenSka</a> 25 octobre 2016 (#community, #continuousLeaarning, #network)</li>
-						<li><a href="http://event.afup.org/">ForumPHP 2016 - AFUP</a> 27 & 28 octobre 2016, Beffroi de Montrouge (#community, #continuousLeaarning, #network)</li>
-					</ul>
-				</section>
 			</div>
 		</div>
 
@@ -587,7 +346,7 @@ class WithLogger implements LoggerAwareInterface
 				progress: true,
 				history: true,
 				center: true,
-				slideNumber: 'c/t',
+				slideNumber: false,
 
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
