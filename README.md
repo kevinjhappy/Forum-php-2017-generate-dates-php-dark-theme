@@ -1,3 +1,8 @@
+# presentation-php-dates-revealjs
+My working directory for the presentation for the FORUM PHP 2017, in French
+
+
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/kevinjhappy/presentation-php-dates-revealjs/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
