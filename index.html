@@ -274,11 +274,11 @@ $wrongDate = date('Y-m-d', strtotime("Monday of Last Week"));
 // => 1970-01-01</code></pre>
 <pre class="fragment"><code class="php">// You can't construct with strtotime the 13th of this month
 
-$dayFifteenOfThisMonth = date(
+$dayThirteenOfThisMonth = date(
 	'Y-m-d',
 	mktime(0, 0, 0, date('m'), 13, date('Y'))
 );
-// => 2017-05-15</code></pre>
+// => 2017-05-13</code></pre>
 					</section>
 					<section>
 						<img src="images/traps-traps-everywhere.jpg" alt="traps-traps-everywhere">
@@ -335,7 +335,7 @@ $date = new DateTime("First Monday of Last Week");
 $date->format('Y-m-d') ;
 
 // => 2017-04-24</code></pre>
-<pre class="fragment"><code class="php" >// phrases that seems ok but does not work at all
+<pre class="fragment"><code class="php" >// sentences that may seems ok but does not work at all
 
 $wrongDate = new DateTime("Monday of Last Week");
 
@@ -343,6 +343,36 @@ $wrongDate->format('Y-m-d');
 
 // Fatal error: Uncaught Exception: DateTime::__construct():
 // Failed to parse time string (Monday of Last Week) </code></pre>
+					</section>
+					<section>
+<pre><code class="php">// WARNING !! if you are the 31th, Last month will give you
+// the day one of this month
+
+$lastMonthDate = new DateTime("2017-10-31");
+
+$lastMonthDate->modify('Last Month');
+
+echo $lastMonthDate->format('Y-m-d');
+// => 2017-10-01</code></pre>
+						<pre class="fragment"><code class="php">// Only way to get it right is by using this
+$lastMonthDate = new DateTime("2017-10-31");
+
+$lastMonthDate->modify('Last Day of Last Month');
+
+echo $lastMonthDate->format('Y-m-d');
+// => 2017-09-30</code></pre>
+					</section>
+					<section>
+						<h2>Une correction possible avec la librairie Carbon</h2>
+						<pre><code class="php">//Taking the last month of a 31th of this month
+$date = Carbon::createFromDate(2016, 10, 31);
+
+Carbon::useMonthsOverflow(false);
+
+$date->subMonth(1);
+
+echo $date->format('Y-m-d');
+// => 2016-09-30</code></pre>
 					</section>
 					<section>
 						<h2><code>DateTimeImmutable</code> c'est quoi ??</h2>
@@ -362,17 +392,6 @@ $myNewDate = \DateTimeImmutable::createFromMutable($date);
 echo $myNewDate->format('Y-m-d');
 // 2017-09-15</code></pre>
 
-					</section>
-					<section>
-						<h2>Une correction possible avec la librairie Carbon</h2>
-						<pre><code class="php">//Taking the last month of a 31th of the month
-$date = Carbon::createFromDate(2016, 10, 31);
-
-Carbon::useMonthsOverflow(false);
-
-$date->subMonth(1);
-
-// => 2016-09-30</code></pre>
 					</section>
 				<!--End DateTime Object-->
 				</section>
@@ -394,13 +413,12 @@ $date->subMonth(1);
 $date = new DateTime('2017-05-01', new DateTimeZone('Europe/Paris'));
 
 echo "Europe/Paris {$date->format('Y-m-d H:i:sP')} \n";
+// Europe/Paris 2017-05-01 00:00:00+02:00
 
 
 $date->setTimezone(new DateTimeZone('Australia/Sydney'));
 
 echo "Australia/Sydney {$date->format(\DateTime::ISO8601)} \n";
-
-// Europe/Paris 2017-05-01 00:00:00+02:00
 // Australia/Sydney 2017-05-01T08:00:00+1000</code></pre>
 					</section>
 					<section>
@@ -481,7 +499,7 @@ print_r($newDateInParis->getTimezone()->getLocation());
 					</section>
 					<section>
 						<h2>new DateInterval('P2Y4DT6H8M')</h2>
-						<p>?????</p>
+						<h3>??????????????????????</h3>
 						<ul>
 							<li>Le P est pour "Period", on précise des années aux jours</li>
 							<li>Le T est pour "Time", on précise des heures aux secondes</li>
@@ -511,6 +529,28 @@ echo $dateInterval->format('%y years, %d days and %h hours, %i minute');
 				<section>
 					<section>
 						<h1>Quelques situations rencontrés</h1>
+					</section>
+					<section>
+						<p>Demande simple: extraire les 10 derniers jours</p>
+						<pre class="fragment"><code class="php" >// we set default dates, today is 2017-05-29
+
+$endDate = new DateTime();
+$startDate = new DateTime();
+
+// substract 10 days with the object DateInterval
+$startDate->sub(new DateInterval('P10D'));</code></pre>
+						<pre class="fragment"><code class="php">// or you can use Date Interval with regular string
+
+$startDate->sub(new DateInterval::createFromDateString('10 Days'));</code></pre>
+						<pre class="fragment"><code class="php">// or you can use setDate if you don't like DateInterval
+
+$startDate->setDate(
+    (int) $startDate->format('Y'),
+    (int) $startDate->format('m'),
+    (int) $startDate->format('d')-10
+);
+
+// startDate = 2017-05-19 , endDate = 2017-05-29</code></pre>
 					</section>
 					<section>
 						<p>Demande: extraire la dernière demi-semaine, soit du Lundi au Mercredi, ou du Jeudi au Dimanche</p>
@@ -552,28 +592,7 @@ else{
 $endDate = new DateTime('Last Sunday');
 </code></pre>
 					</section>
-					<section>
-						<p>Demande simple: extraire les 10 derniers jours</p>
-						<pre class="fragment"><code class="php" >// we set default dates, today is 2017-05-29
 
-$endDate = new DateTime();
-$startDate = new DateTime();
-
-// substract 10 days with the object DateInterval
-$startDate->sub(new DateInterval('P10D'));</code></pre>
-						<pre class="fragment"><code class="php">// or you can use Date Interval with regular string
-
-$startDate->sub(new DateInterval::createFromDateString('10 Days'));</code></pre>
-						<pre class="fragment"><code class="php">// or you can use setDate if you don't like DateInterval
-
-$startDate->setDate(
-    (int) $startDate->format('Y'),
-    (int) $startDate->format('m'),
-    (int) $startDate->format('d')-10
-);
-
-// startDate = 2017-05-19 , endDate = 2017-05-29</code></pre>
-					</section>
 					<section>
 						<h2>Que se passe-t-il si je fais ceci ??</h2>
 						<pre><code class="php" >// Today is 2017-05-29
@@ -635,7 +654,7 @@ echo $date->format('Y-m-d');
 // in PHP 5.6.0 - 5.6.30, 7.0.0 - 7.0.16, 7.1.0 - 7.1.2
 
 // 2017-05-31 => 2012-02-29</code></pre>
-						<p>Finalement il a calculé le dernier jour de Février 2012 (année bissextile)</p>
+						<p class="fragment">Finalement il a calculé le dernier jour de Février 2012 (année bissextile)</p>
 					</section>
 					<section>
 						<h2>Mon conseil: Ne le faites pas !<br>
@@ -658,7 +677,7 @@ echo $date->format('Y-m-d');
 					<section>
 						<h2>Attention !!</h2>
 						<ul>
-							<li>Ne créez jamais de dates avec une chaine de caractères sans l'avoir testé dans plusieurs situations<br>
+							<li>Ne créez jamais de dates avec une chaine de caractères sans l'avoir testé dans plusieurs situations !<br>
 							Par exemple: au 31 Janvier, sur une année Bissextile, etc...</li>
 							<li>Gardez en tête qu'un comportement sur une version de PHP ne marchera pas forcément sur une autre</li>
 						</ul>
@@ -666,7 +685,7 @@ echo $date->format('Y-m-d');
 				</section>
 				<section>
 					<h2>Merci ;)</h2>
-					<img src="images/my-work-here-is-done-thank-you-all.jpg" alt="My work here is done, thank you all">
+					<img src="images/dicaprio-thank-you-all.jpg" alt="My work here is done, thank you all">
 				</section>
 				<section>
 					<h2>Des questions ??</h2>
