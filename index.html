@@ -168,7 +168,9 @@ $timestampLastMonth = mktime(0, 0, 0, $month, 1, $year);
 // get the last day of the month, so the 30th April
 $lastDayOfTheMonth = date('t', $timestampLastMonth);
 
-$timestampLastDayOfLastMonth = mktime(0, 0, 0, $month, $lastDayOfTheMonth, $year);
+$timestampLastDayOfLastMonth = mktime(
+	0, 0, 0, $month, $lastDayOfTheMonth, $year
+	);
 
 // I have the correct timestamp, I can call the function date
 $lastDayOfLastMonth = date('Y-m-d', $timestampLastDayOfLastMonth);
@@ -719,7 +721,9 @@ echo $date->format('Y-m-d');
 					{ src: 'plugin/zoom-js/zoom.js', async: true },
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
+
 			});
+            Reveal.configure({ pdfMaxPagesPerSlide: 1 });
 
 		</script>
 
