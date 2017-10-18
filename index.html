@@ -18,7 +18,12 @@
 		<link rel="stylesheet" href="css/theme/sky-new.css" id="theme">
 
 		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<!--<link rel="stylesheet" href="lib/css/foundation.css">-->
+		<!--<link rel="stylesheet" href="lib/css/github-gist.css">-->
+		<!--<link rel="stylesheet" href="lib/css/atom-one-light.css">-->
+		<!--<link rel="stylesheet" href="lib/css/default.css">-->
+		<!--<link rel="stylesheet" href="lib/css/zenburn.css">-->
+		<link rel="stylesheet" href="lib/css/foundation.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -117,8 +122,8 @@ echo $testDate;
 					</section>
 					<section>
 						<h2>Timestamps ??</h2>
-						<p>Un timestamp unix est le nombre de secondes écoulée depuis le<br><strong>1er Janvier 1970</strong></p>
-						<p>Aucun décalage horaire n'est appliqué à ce calcul</p>
+						<p>Un timestamp unix est le nombre de secondes écoulées depuis le<br><strong>1er Janvier 1970</strong> sans fuseau horaire</p>
+						<p>Vient des normes de l'IEEE qui ont standardisé cette date en marquant le début de l'ère UNIX</p>
 					</section>
 				</section>
 				<section>
@@ -157,7 +162,7 @@ echo $myDate; // 2016-10-24</code></pre>
 						<p>Mais cela peut apporter une précision chirurgicale</p>
 					</section>
 					<section>
-						<pre width="800"><code class="php">// I want to get the last day of last month, we are the 26th May 2017
+						<pre class="stretch"><code class="php">// I want to get the last day of last month, we are the 26th May 2017
 
 $month = date('m') - 1;
 $year = date('Y');
@@ -175,8 +180,7 @@ $timestampLastDayOfLastMonth = mktime(
 // I have the correct timestamp, I can call the function date
 $lastDayOfLastMonth = date('Y-m-d', $timestampLastDayOfLastMonth);
 
-echo $lastDayOfLastMonth; // 2017-04-30
-</code></pre>
+echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
 					</section>
 					<section><img src="images/I-smile-because-i-have-no-idea-whats-going-on.jpg" alt="I smile because I have no idea whats going on">
 					</section>
@@ -221,7 +225,7 @@ $lastDayOfLastMonth = date(
 						<h1>La fonction <code>strtotime()</code></h1>
 					</section>
 					<section>
-						<p>Supposons, nous somme le 2017-05-26 :</p>
+						<p>Supposons, nous sommes le 2017-05-26 :</p>
 						<pre class="fragment" ><code class="php">$firstDayOfLastMonth = date('Y-m-d', strtotime("first day of last month"));
 
 // => 2017-04-01</code></pre>
@@ -264,9 +268,6 @@ $goodDate = date('Y-m-d', strtotime(
 
 // => 2017-09-30</code></pre>
 
-					</section>
-					<section>
-						<img src="images/Jackie-Chan-WTF.jpg" alt="Jackie-Chan-WTF">
 					</section>
 					<section>
 <pre><code class="php">// WARNING, some sentences may seem ok but do not work at all
@@ -365,7 +366,7 @@ echo $lastMonthDate->format('Y-m-d');
 // => 2017-09-30</code></pre>
 					</section>
 					<section>
-						<h2>Une correction possible avec la librairie Carbon</h2>
+						<h2>Petite parenthèse : correction possible avec la librairie Carbon</h2>
 						<pre><code class="php">//Taking the last month of a 31th of this month
 $date = Carbon::createFromDate(2016, 10, 31);
 
@@ -377,9 +378,20 @@ echo $date->format('Y-m-d');
 // => 2016-09-30</code></pre>
 					</section>
 					<section>
-						<h2><code>DateTimeImmutable</code> c'est quoi ??</h2>
-						<p>C'est la même utilisation que <code>DateTime()</code></p>
-						<p>La seule différence est que cet objet ne peut pas être modifié une fois créé.</p>
+						<h2>Parlons aussi de <code>DateTimeImmutable</code></h2>
+						<ul>
+							<li>Même utilisation que <code>DateTime()</code></li>
+							<li>Différence : ne peut pas être modifié une fois créé.</li>
+							<li>Toute modification renvoit un nouvel objet</li>
+						</ul>
+					</section>
+					<section>
+						<pre><code class="php">$date = new DateTimeImmutable("2017-05-26");
+
+$newDate = $date->setDate(2017, 07, 12);
+
+echo $date->format('Y-m-d'), " <=> ", $newDate->format('Y-m-d');
+// 2017-05-26 <=> 2017-07-12</code></pre>
 					</section>
 					<section>
 						<h2>Une fonction en plus : </h2>
@@ -515,17 +527,17 @@ print_r($newDateInParis->getTimezone()->getLocation());
 
 $dateInterval = new DateInterval('P2Y4DT6H8M');
 
-echo $dateInterval->format('%y years, %d days and %h hours, %i minute');
-// 2 years, 4 days and 6 hours, 8 minute
+echo $dateInterval->format('%y years, %d days and %h hours, %i minutes');
+// 2 years, 4 days and 6 hours, 8 minutes
 
 // equivalent to :
 
 $dateInterval = DateInterval::createFromDateString(
-    '2 year + 4 day + 6 hour + 8 minute'
+    '2 year + 4 day + 6 hour + 8 minutes'
 );
 
-echo $dateInterval->format('%y years, %d days and %h hours, %i minute');
-// 2 years, 4 days and 6 hours, 8 minute</code></pre>
+echo $dateInterval->format('%y years, %d days and %h hours, %i minutes');
+// 2 years, 4 days and 6 hours, 8 minutes</code></pre>
 					</section>
 				</section>
 				<section>
@@ -533,7 +545,7 @@ echo $dateInterval->format('%y years, %d days and %h hours, %i minute');
 						<h1>Quelques situations rencontrés</h1>
 					</section>
 					<section>
-						<p>Demande simple: extraire les 10 derniers jours</p>
+						<p>Demande simple : extraire les 10 derniers jours</p>
 						<pre class="fragment"><code class="php" >// we set default dates, today is 2017-05-29
 
 $endDate = new DateTime();
@@ -544,18 +556,14 @@ $startDate->sub(new DateInterval('P10D'));</code></pre>
 						<pre class="fragment"><code class="php">// or you can use Date Interval with regular string
 
 $startDate->sub(new DateInterval::createFromDateString('10 Days'));</code></pre>
-						<pre class="fragment"><code class="php">// or you can use setDate if you don't like DateInterval
+						<pre class="fragment"><code class="php">// or you can use the construct if you don't like DateInterval
 
-$startDate->setDate(
-    (int) $startDate->format('Y'),
-    (int) $startDate->format('m'),
-    (int) $startDate->format('d')-10
-);
+$startDate = new DateTime("now - 10 days");
 
 // startDate = 2017-05-19 , endDate = 2017-05-29</code></pre>
 					</section>
 					<section>
-						<p>Demande: extraire la dernière demi-semaine, soit du Lundi au Mercredi, ou du Jeudi au Dimanche</p>
+						<p>Demande : extraire la dernière demi-semaine, soit du lundi au mercredi, ou du jeudi au dimanche</p>
 						<pre class="fragment"><code class="php" >// If today is between Monday to Wednesday,
 // We want to get dates from last Thursday to last Sunday
 $today = new DateTime();
@@ -673,25 +681,26 @@ echo $date->format('Y-m-d');
 						<h2>Avec les bonnes pratiques d'aujourd'hui</h2>
 						<ul>
 							<li><code>DateTimeImmutable</code> avec <code>DateTimeZone</code> sont les plus utilisés</li>
-							<li>Les fonctions <code>date()</code> avec des timestamps étaient surtout utilisés en procédural</li>
+							<li>Les fonctions <code>date()</code> avec des timestamps étaient surtout utilisées en procédural</li>
 						</ul>
 					</section>
 					<section>
 						<h2>Attention !!</h2>
 						<ul>
-							<li>Ne créez jamais de dates avec une chaine de caractères sans l'avoir testé dans plusieurs situations !<br>
+							<li>Ne créez jamais de dates avec une chaine de caractères sans les avoir testées dans plusieurs situations !<br>
 							Par exemple: au 31 Janvier, sur une année Bissextile, etc...</li>
 							<li>Gardez en tête qu'un comportement sur une version de PHP ne marchera pas forcément sur une autre</li>
+							<li>faketime : modifie la date du système pour l'application</li>
 						</ul>
 					</section>
 				</section>
 				<section>
-					<h2>Merci ;)</h2>
-					<img src="images/dicaprio-thank-you-all.jpg" alt="My work here is done, thank you all">
-				</section>
-				<section>
 					<h2>Des questions ??</h2>
 					<img src="images/you-get-a-question-everyone-gets-a-question-2.jpg" alt="You get a question! You get a question! Everyone gets a question!">
+				</section>
+				<section>
+					<h2>Merci ;)</h2>
+					<img src="images/my-work-here-is-done-thank-you-all.jpg" alt="My work here is done, thank you all">
 				</section>
 
 			</div>
