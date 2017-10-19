@@ -426,13 +426,14 @@ echo $myNewDate->format('Y-m-d');
 
 $date = new DateTime('2017-05-01', new DateTimeZone('Europe/Paris'));
 
-echo "Europe/Paris {$date->format('Y-m-d H:i:sP')} \n";
-// Europe/Paris 2017-05-01 00:00:00+02:00
+echo "Europe/Paris " , $date->format('Y-m-d H:i:sP');
 
+// Europe/Paris 2017-05-01 00:00:00+02:00
 
 $date->setTimezone(new DateTimeZone('Australia/Sydney'));
 
-echo "Australia/Sydney {$date->format(\DateTime::ISO8601)} \n";
+echo "Australia/Sydney " , $date->format(\DateTime::ISO8601);
+
 // Australia/Sydney 2017-05-01T08:00:00+1000</code></pre>
 					</section>
 					<section>
@@ -447,21 +448,21 @@ echo "Australia/Sydney {$date->format(\DateTime::ISO8601)} \n";
 
 $date = new DateTime('2017-05-01', new DateTimeZone('+02:00'));
 
-echo "UTC + 2 hours " . $date->format('Y-m-d H:i:sP') . "\n";
+echo "UTC + 2 hours " , $date->format('Y-m-d H:i:sP') ;
 
 // UTC + 2 hours 2017-05-01 00:00:00+02:00
 
 
 $utcDate = new DateTime('2017-05-01', new DateTimeZone('UTC'));
 
-echo "UTC date " . $utcDate->format('Y-m-d H:i:sP') . "\n";
+echo "UTC date " , $utcDate->format('Y-m-d H:i:sP');
 
 // UTC date 2017-05-01 00:00:00+00:00</code></pre>
 					</section>
 					<section>
 						<h2>Et bien sûr... des pièges !</h2>
 						<pre><code class="php">// today in Paris, let's try to get the location of the timezone
-$dateInParis = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+$dateInParis = new DateTime('now', new \DateTimeZone('Europe/Paris'));
 
 print_r($dateInParis->getTimezone()->getLocation());
 /*Array (
@@ -472,7 +473,7 @@ print_r($dateInParis->getTimezone()->getLocation());
 )*/</code></pre>
 <pre class="fragment"><code class="php">// now if we received this date in string format
 
-$newDateInParis = new \DateTime($dateInParis->format('Y-m-d H:i:sP'));
+$newDateInParis = new DateTime($dateInParis->format('Y-m-d H:i:sP'));
 
 var_dump($newDateInParis->getTimezone()->getLocation());
 
@@ -482,9 +483,9 @@ var_dump($newDateInParis->getTimezone()->getLocation());
 						<h2>Pour éviter ce piège</h2>
 						<pre><code class="php">// today in Paris, let's try to get the location of the timezone
 
-$dateInParis = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+$dateInParis = new DateTime('now', new \DateTimeZone('Europe/Paris'));
 
-$newDateInParis = new \DateTime(
+$newDateInParis = new DateTime(
     $dateInParis->format('Y-m-d H:i:s'),
     $dateInParis->getTimezone()
 );
@@ -513,7 +514,7 @@ print_r($newDateInParis->getTimezone()->getLocation());
 					</section>
 					<section>
 						<h2>new DateInterval('P2Y4DT6H8M')</h2>
-						<h3>??????????????????????</h3>
+						<h3>Quelle est cette chose ??????</h3>
 						<ul>
 							<li>Le P est pour "Period", on précise des années aux jours</li>
 							<li>Le T est pour "Time", on précise des heures aux secondes</li>
@@ -530,7 +531,7 @@ $dateInterval = new DateInterval('P2Y4DT6H8M');
 echo $dateInterval->format('%y years, %d days and %h hours, %i minutes');
 // 2 years, 4 days and 6 hours, 8 minutes
 
-// equivalent to :
+// equals to :
 
 $dateInterval = DateInterval::createFromDateString(
     '2 year + 4 day + 6 hour + 8 minutes'
