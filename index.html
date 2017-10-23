@@ -182,10 +182,8 @@ $lastDayOfLastMonth = date('Y-m-d', $timestampLastDayOfLastMonth);
 
 echo $lastDayOfLastMonth; // 2017-04-30</code></pre>
 					</section>
-					<section><img src="images/I-smile-because-i-have-no-idea-whats-going-on.jpg" alt="I smile because I have no idea whats going on">
-					</section>
 					<section><pre class="stretch"><code class="php">//  I want to get the last day of last month, we are the 26th May 2017
-// made in one line 
+// made in one line
 
 $lastDayOfLastMonth = date(
     'Y-m-d', 
@@ -241,9 +239,12 @@ $lastDayOfLastMonth = date(
 					</section>
 					<section>
 						<h2>Alors <code>strtotime</code> est bien ?</h2>
-						<p>Ouais, c'est pas mal du tout</p>
-						<p>Mais il faut faire attention à la "magie" de la fonction</p>
-						<p>Certaines dates ne peuvent pas être faites avec</p>
+						<ul>
+							<li>Ouais, c'est pas mal du tout !</li>
+							<li>Il faut faire attention à la "magie" de la fonction</li>
+							<li>Certaines dates ne peuvent pas être faites avec</li>
+							<li>php.net : Formats relatifs</li>
+						</ul>
 					</section>
 					<section>
 						<pre><code class="php">// WARNING !! first Specific day of last week
@@ -298,7 +299,7 @@ $dayThirteenOfThisMonth = date(
 					</section>
 					<section>
 						<h2>Yeah !!</h2>
-						<img src="images/yeah-gif.gif" alt="yeah gif">
+						<img src="images/minions-yeah.gif" alt="minions yeah" width="75%" height="75%">
 					</section>
 					<section>
 						<img src="images/hum-no.png" atl="hum... No !">
@@ -693,6 +694,10 @@ echo $date->format('Y-m-d');
 							<li>Gardez en tête qu'un comportement sur une version de PHP ne marchera pas forcément sur une autre</li>
 							<li>faketime : modifie la date du système pour l'application</li>
 						</ul>
+					</section>
+					<section>
+						<h2>Pour simplifier...</h2>
+						<img src="images/one-does-not-simply-trust-a-datetime-function.jpg" alt="One does not simply trust a DateTime function">
 					</section>
 				</section>
 				<section>
