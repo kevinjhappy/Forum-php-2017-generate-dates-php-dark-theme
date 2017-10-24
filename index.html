@@ -309,9 +309,8 @@ $dayThirteenOfThisMonth = date(
 					<section>
 						<pre><code class="php">$firstDayOfThisMonth = new \DateTime('first day of this month');
 
-$firstDayOfThisMonth->format('Y-m-d');
-
-// => 2017-05-01</code></pre>
+echo $firstDayOfThisMonth->format('Y-m-d');
+// 2017-05-01</code></pre>
 						<pre class="fragment"><code class="php">$dayFifteenOfThisMonth = new \DateTime();
 
 $dayFifteenOfThisMonth->setTime(0, 0, 0);
@@ -322,9 +321,8 @@ $dayFifteenOfThisMonth->setDate(
     15
 );
 
-$dayFifteenOfThisMonth->format('Y-m-d');
-
-// => 2017-05-15</code></pre>
+echo $dayFifteenOfThisMonth->format('Y-m-d');
+// 2017-05-15</code></pre>
 					</section>
 					<section>
 						<h2>Et les pièges sont les mêmes !</h2>
@@ -336,14 +334,13 @@ $dayFifteenOfThisMonth->format('Y-m-d');
 
 $date = new DateTime("First Monday of Last Week");
 
-$date->format('Y-m-d') ;
-
-// => 2017-04-24</code></pre>
+echo $date->format('Y-m-d') ;
+// 2017-04-24</code></pre>
 <pre class="fragment"><code class="php" >// sentences that may seems ok but does not work at all
 
 $wrongDate = new DateTime("Monday of Last Week");
 
-$wrongDate->format('Y-m-d');
+echo $wrongDate->format('Y-m-d');
 
 // Fatal error: Uncaught Exception: DateTime::__construct():
 // Failed to parse time string (Monday of Last Week) </code></pre>
@@ -357,14 +354,14 @@ $lastMonthDate = new DateTime("2017-10-31");
 $lastMonthDate->modify('Last Month');
 
 echo $lastMonthDate->format('Y-m-d');
-// => 2017-10-01</code></pre>
+// 2017-10-01</code></pre>
 						<pre class="fragment"><code class="php">// Only way to get it right is by using this
 $lastMonthDate = new DateTime("2017-10-31");
 
 $lastMonthDate->modify('Last Day of Last Month');
 
 echo $lastMonthDate->format('Y-m-d');
-// => 2017-09-30</code></pre>
+// 2017-09-30</code></pre>
 					</section>
 					<section>
 						<h2>Petite parenthèse : correction possible avec la librairie Carbon</h2>
@@ -376,7 +373,7 @@ Carbon::useMonthsOverflow(false);
 $date->subMonth(1);
 
 echo $date->format('Y-m-d');
-// => 2016-09-30</code></pre>
+// 2016-09-30</code></pre>
 					</section>
 					<section>
 						<h2>Parlons aussi de <code>DateTimeImmutable</code></h2>
@@ -398,11 +395,9 @@ echo $date->format('Y-m-d'), " <=> ", $newDate->format('Y-m-d');
 						<h2>Une fonction en plus : </h2>
 							<p><code>DateTimeImmutable::createFromMutable</code></p>
 						<pre class="fragment"><code class="php">// create a specific date
-$date = new \DateTime();
-$date->setTime(0, 0, 0);
-$date->setDate(2017, 09, 15);
+$date = new DateTime('2017-09-15');
 
-$myNewDate = \DateTimeImmutable::createFromMutable($date);
+$myNewDate = DateTimeImmutable::createFromMutable($date);
 
 echo $myNewDate->format('Y-m-d');
 // 2017-09-15</code></pre>
@@ -424,18 +419,20 @@ echo $myNewDate->format('Y-m-d');
 					</section>
 					<section>
 						<pre><code class="php">// set a date with a Timezone
-
 $date = new DateTime('2017-05-01', new DateTimeZone('Europe/Paris'));
 
-echo "Europe/Paris " , $date->format('Y-m-d H:i:sP');
+echo "Europe/Paris " , $date->format('Y-m-d H:i:s P');
+// Europe/Paris 2017-05-01 00:00:00 +02:00
 
-// Europe/Paris 2017-05-01 00:00:00+02:00
+$date->setDate(2017, 01, 01);
+
+echo "Europe/Paris en hiver " , $date->format('Y-m-d H:i:s P');
+// Europe/Paris en hiver 2017-01-01 00:00:00 +01:00
 
 $date->setTimezone(new DateTimeZone('Australia/Sydney'));
 
 echo "Australia/Sydney " , $date->format(\DateTime::ISO8601);
-
-// Australia/Sydney 2017-05-01T08:00:00+1000</code></pre>
+// Australia/Sydney 2017-01-01T10:00:00+1100</code></pre>
 					</section>
 					<section>
 						<h2>Fuseaux Horaires possibles</h2>
