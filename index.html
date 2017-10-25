@@ -567,7 +567,7 @@ $startDate = new DateTime("now - 10 days");
 // We want to get dates from last Thursday to last Sunday
 $today = new DateTime();
 
-// format N indicate the day number, Monday = 1, Tuesday = 2, etc...
+// 'N' indicate the day number, Monday = 1, Tuesday = 2 ... Sunday = 7
 if ($today->format('N') < 4 ){
     $startDate = new DateTime('Last Thursday');
     $endDate = new DateTime('Last Sunday');
